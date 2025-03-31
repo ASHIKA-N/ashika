@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Program DOM</title>
+    <style>
+        .images {
+            margin: 80px 100px;
+            border: 4px solid red;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+        .images img {
+            width: 300px;
+            transition: transform 0.4s ease-in-out;
+        }
+        .piece {
+            position: absolute;
+            width: 30px; 
+            height: 30px;
+            background-size: 300px 300px;
+            opacity: 1;
+            transition: transform 1s ease, opacity 1s ease;
+        }
+        .fade-out {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="images">
+        <img src="https://cdn.educba.com/academy/wp-content/uploads/2016/02/fundamentals-of-programming-738x461.jpg" alt="Attractive Image">
+        <p>FUNDAMENTAL PROGRAMMING</p>
+    </div>
+    <div class="images">
+        <img src="https://2.bp.blogspot.com/-U5UbLbjuQvM/Wp-Pb-34TnI/AAAAAAAAAJg/bwLpWnM_L0E90DkN8OpzIm5ol8axYtcugCLcBGAs/s1600/7%2B1webdevelopment_1600x1200_021014.jpg" alt="Attractive Image">
+        <p>WEB DEVELOPMENT</p>
+    </div>
+    <div class="images">
+        <img src="https://images.yourstory.com/cs/1/b3c9ea44-ab5e-11e8-8691-f70342131e20/Top6%20Software%20Development%20Functions%20Crucial%20to%20your%20Business%20in%2020191542795654826.jpg?fm=png&auto=format" alt="Attractive Image">
+        <p>SOFTWARE DEVELOPMENT</p>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const images = document.querySelectorAll(".images img");
+            const texts = document.querySelectorAll(".images p");
+            
+            function splitImage(container, img) {
+                const src = img.src;
+                const pieceSize = 30;
+                const numRows = Math.ceil(300 / pieceSize);
+                const numCols = Math.ceil(300 / pieceSize);
+                
+                container.innerHTML = "";
+                
+                for (let row = 0; row < numRows; row++) {
+                    for (let col = 0; col < numCols; col++) {
+                        const piece = document.createElement("div");
+                        piece.classList.add("piece");
+                        piece.style.width = pieceSize + "px";
+                        piece.style.height = pieceSize + "px";
+                        piece.style.left = col * pieceSize + "px";
+                        piece.style.top = row * pieceSize + "px";
+                        piece.style.backgroundImage = `url(${src})`;
+                        piece.style.backgroundPosition = `-${col * pieceSize}px -${row * pieceSize}px`;
+                        container.appendChild(piece);
+                        
+                        setTimeout(() => {
+                            const randomX = (Math.random() - 0.5) * 400;
+                            const randomY = (Math.random() - 0.5) * 400;
+                            const randomRotation = (Math.random() - 0.5) * 360;
+                            piece.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${randomRotation}deg)`;
+                            piece.classList.add("fade-out");
+                        }, 100);
+                    }
+                }
+            }
+            
+            images.forEach(img => {
+                img.addEventListener("click", function () {
+                    splitImage(img.parentElement, img);
+                });
+            });
+            
+            texts.forEach(text => {
+                text.addEventListener("click", function () {
+                    const img = text.previousElementSibling;
+                    if (img && img.tagName === "IMG") {
+                        splitImage(text.parentElement, img);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
